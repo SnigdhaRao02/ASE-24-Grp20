@@ -1,4 +1,6 @@
 import re
+from ast import Num
+from sym import Sym
 
 class Cols:
     def __init__ (self, row):
@@ -12,9 +14,9 @@ class Cols:
             n= row.index(name_col)
             name_col = name_col.strip()
             if name_col[0].islower():
-                col = SYM(name_col,n)
+                col = Sym(name_col,n)
             else:
-                col = NUM(name_col, n)
+                col = Num(name_col, n)
             self.all.append(col)
             if not name_col[-1] == "X":
                 if "!" in name_col:
