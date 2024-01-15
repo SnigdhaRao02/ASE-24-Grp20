@@ -1,7 +1,7 @@
 # ASE24-Grp20
 
 
-#Collaborators\
+# Collaborators\
 Atharv Kale\
 Challa Sai Charitha\
-Snigdha Kotharu\
+Snigdha Kotharu
