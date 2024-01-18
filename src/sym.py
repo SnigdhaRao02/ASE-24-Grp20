@@ -12,8 +12,9 @@ class Sym:
     def add(self,x):
         if x!="?":
             self.n+=1
+           
             if(x not in self.has.keys()):
-                self.has[x]=0
+                self.has[x]=1
             else:
                 self.has[x]+=1
             if(self.has[x]>self.most):
@@ -21,10 +22,11 @@ class Sym:
 
     def mid(self):
         return self.mode
-    def div(self,e):
+    def div(self):
         e=0
         for k in self.has:
-            e=e-self.has[k]/self.n*math.log(self.has[k]/self.n,2)
+            #print(self.has[k]/self.n)
+            e=e-self.has[k]/self.n * math.log(self.has[k]/self.n,2)
 
         return e
 

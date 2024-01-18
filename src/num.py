@@ -8,8 +8,9 @@ class Num:
         self.lo,self.hi =1000000000000000, -1000000000000000
         #heaven to be added
     def add(self,x):
-        if x!='?':
+        if x!="?":
             self.n+=1
+            x=float(x)
             d=x-self.mu
             self.mu+=d/self.n
             self.m2+=d*(x-self.mu)
@@ -26,10 +27,16 @@ class Num:
         if(x=='?'):
             return (x)
         else:
-            (x - self.lo) / (self.hi - self.lo + pow(10,-30))
+            return((x - self.lo) / (self.hi - self.lo + pow(10,-30)))
             
  
         
-
+# obj=Num()
+# obj.add(10)
+# obj.add(23)
+# obj.add(11)
+# print(obj.mid())
+# print(obj.div())
+# print(obj.norm(200))
       
 

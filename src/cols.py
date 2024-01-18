@@ -9,10 +9,11 @@ class Cols:
         self.y={}
         self.all = {}
         self.klass=None
+        
         self.names= row
 
-        for name_col in row:
-            n= row.index(name_col)
+        for name_col in self.names:
+            n= self.names.index(name_col)
             name_col = name_col.strip()
             if name_col[0].islower():
                 col = Sym(name_col,n)
@@ -30,10 +31,11 @@ class Cols:
                     self.x[n]=col
 
     def add(self, row):
-        for col in self.y:
+        m={**self.x,**self.y}
+        for  _,col in m.items():
             col.add(row[col.at])
-        for col in self.x:
-            col.add(row[col.at])
+        return row
+       
         
         #for A in [self.x, self.y]:
             #for col in A:
