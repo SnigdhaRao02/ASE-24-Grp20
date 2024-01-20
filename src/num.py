@@ -17,7 +17,7 @@ class Num:
             self.lo=min(x,self.lo)
             self.hi=max(x,self.hi)
     def mid(self):
-        return self.mu 
+        return round(self.mu,2) 
     def div(self):
         if self.n <2:
             return 0

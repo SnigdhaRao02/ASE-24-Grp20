@@ -24,12 +24,14 @@ class Data:
             self.cols=Cols(row.cells)
         self.rows.append(row.cells)
 
-    def mid(self):
-        u={}
-        for col in self.cols:
-            u[1+len(u)]=col.mid()
-        r=Row(u)
-        return(r)
+    def mid(self, cols=None):
+        # Calculate the mid (mean/mode) of the specified columns
+        u = {}
+        m = {**self.cols.x, **self.cols.y} if cols is None else cols
+        u[".N"] = len(self.rows)-1
+        for _,col in m.items():
+            u[col.txt] = col.mid()
+        return Row(u)
     
 
    # def mid(self,cols, u):
