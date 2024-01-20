@@ -1,4 +1,6 @@
 import math
+import config
+
 class Sym:
     def __init__(self,s="",n=0) -> None:
         self.at= n
@@ -29,6 +31,19 @@ class Sym:
             e=e-self.has[k]/self.n * math.log(self.has[k]/self.n,2)
 
         return e
+    #Part of HW3
+    def like(self,x,prior):
+        cons=(self.has[x]+(config.the.m)*prior)/(self.n+config.the.m)
+        return(cons)
+
+
+    
+
+
+  
+
+
+    
 
         
     

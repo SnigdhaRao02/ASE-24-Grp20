@@ -3,15 +3,13 @@ import random
 sys.path.append("../ASE-24-Grp20/")
 from test import run_tests
 from data import Data
+import config
 
-the = {
-    "cohen": 0.35,
-    "k": 1,
-    "m": 2,
-    "seed": 31210
-}
 
-random.seed(the["seed"])
+
+
+
+random.seed(config.the.seed)
 
 def get_stats(file):
   data = Data(src = file)
@@ -49,6 +47,7 @@ def main():
     if (args['todo']=='stats'):
       get_stats(args['file'])
     else:
+      
       run_tests(args['todo'])
     
 if __name__ == '__main__':

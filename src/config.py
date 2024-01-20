@@ -18,6 +18,8 @@ OPTIONS:
   -m --min    minimum size               = .5
   -r --rest   |rest| is |best|*rest        = 3
   -T --Top    max. good cuts to explore   = 10 
+  -k --k      low class frequency kludge       = 1
+  -mm --m      low attribute frequency kludge = 2
 """
 
 """
@@ -25,6 +27,13 @@ before reading this, do you know about docstrings, dictionary compressions,
 regular expressions,and exception handling, 
 """
 import re, ast
+# the = {
+#     "cohen": 0.35,
+#     "k": 1,
+#     "m": 2,
+#     "seed": 31210
+# }
+
 
 def coerce(x):
    try : return ast.literal_eval(x)
@@ -46,4 +55,4 @@ the = SLOTS(**{m[1]:coerce(m[2]) for m in re.finditer( r"--(\w+)[^=]*=\s*(\S+)",
 
 the.bins=22
 the.bins += 1
-print(the)
+#print(the)
