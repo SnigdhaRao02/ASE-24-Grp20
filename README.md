@@ -1,4 +1,4 @@
-# ASE24-Grp20
+# ASE24-Grp16
 Github Repo for Spring 24 ASE HW.
 
 # Team Members
