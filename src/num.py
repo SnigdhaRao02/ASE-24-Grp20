@@ -1,4 +1,4 @@
-
+import math
 class Num:
     def __init__(self,s="",n=0) -> None:
         self.at= n
@@ -33,7 +33,8 @@ class Num:
     #Part of HW3
     def like(self,x,_):
         mu,sd=self.mid(),(self.div()+pow(10,-30))
-        nom=pow(2.718,((pow(-0.5*(x-mu),2))/pow(sd,2)))
+        #nom=pow(2.718,((pow(-0.5*(x-mu),2))/pow(sd,2)))
+        nom=math.exp(-0.5 * (x - mu)**2 / sd**2)
         denom=(sd*2.5)+pow(10,-30)
         return(nom/denom)
             

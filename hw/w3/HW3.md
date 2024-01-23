@@ -34,7 +34,7 @@ ___
 
 # Task 3
 ___
-##### **Accuracy:**  0.9947229551451188 -> 99% (for k=1 and m=2)  
+##### **Accuracy:**  0.7308707124010554 -> 73% (for k=1 and m=2)  
   
 
 
@@ -43,4 +43,4 @@ ___
 ##### K and M setting recommendations:
 ##### - For Diabetes.csv: We took k=1 and m=2. Since, there are no low frequency classes in this data, k and m can also be zero.  
 
-##### - For Soyabean.csv: k=2 and m=0 (0.001) gives the highest accuracy of 89.45%
+##### - For Soyabean.csv: k=1 and m=0 (0.001) gives the highest accuracy of 87.07%

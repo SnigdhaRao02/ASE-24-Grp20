@@ -9,9 +9,10 @@ class Data:
         if(isinstance(src,str)):
             reader=csv(src)
             for row in reader:
-                self.add(row,fun)
+                self.add(Row(row),fun)
                 # print(row)
-       # else:
+        else:
+            self.add(Row(src),fun)
         #   for _,row in enumerate(src):
                 # self.add(row,fun)
                 # print(row,"YAYAYA")
