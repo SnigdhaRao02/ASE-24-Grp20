@@ -10,19 +10,29 @@ class Data:
             reader=csv(src)
             for row in reader:
                 self.add(row,fun)
-        else:
-            for row in src:
-                self.add(row,fun)
+                # print(row)
+       # else:
+        #   for _,row in enumerate(src):
+                # self.add(row,fun)
+                # print(row,"YAYAYA")
 
 
     def add(self,t,fun=None):
-        row=Row(t)
-        if(self.cols!=None):
-            
-            self.cols.add(row.cells)
+        # if(t.cells!=None):
+        #     row=t
+        # else:
+
+        row = t if type(t) == Row else Row(t)
+        #row=Row(t)
+        #row = t.cells if t.cells else ROW.new(t)
+        if(self.cols!=None):  
+            if(fun!=None):
+                fun(self,row)    
+            # self.cols.add(row.cells)
+            self.rows.append(self.cols.add(row.cells))
         else:
             self.cols=Cols(row.cells)
-        self.rows.append(row.cells)
+        #self.rows.append(row.cells)
 
     def mid(self, cols=None):
         # Calculate the mid (mean/mode) of the specified columns

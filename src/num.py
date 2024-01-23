@@ -29,7 +29,9 @@ class Num:
             return (x)
         else:
             return((x - self.lo) / (self.hi - self.lo + pow(10,-30)))
-    def like(self,x,_,nom,denom):
+    
+    #Part of HW3
+    def like(self,x,_):
         mu,sd=self.mid(),(self.div()+pow(10,-30))
         nom=pow(2.718,((pow(-0.5*(x-mu),2))/pow(sd,2)))
         denom=(sd*2.5)+pow(10,-30)
