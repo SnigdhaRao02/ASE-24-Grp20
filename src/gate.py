@@ -5,10 +5,6 @@ from test import run_tests
 from data import Data
 import config
 
-
-
-
-
 random.seed(config.the.seed)
 
 def get_stats(file):

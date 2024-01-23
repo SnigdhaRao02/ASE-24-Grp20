@@ -33,7 +33,8 @@ class Sym:
         return e
     #Part of HW3
     def like(self,x,prior):
-        cons=(self.has[x]+(config.the.m)*prior)/(self.n+config.the.m)
+        #print(x)
+        cons=(self.has.get(x,0)+(config.the.m)*prior)/(self.n+config.the.m)
         return(cons)
 
 
