@@ -9,6 +9,7 @@ def csv(file="-"):
     for line in src:
       line = re.sub(r'([\n\t\r"\' ]|#.*)', '', line)
       if line: yield [coerce(x) for x in line.split(",")]
+      
 
 # #def get_csv_rows(src):
 #   rows=[]

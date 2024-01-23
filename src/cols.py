@@ -14,13 +14,11 @@ class Cols:
 
         for name_col in self.names:
             n= self.names.index(name_col)
-            name_col = name_col.strip()
-            if name_col[0].islower():
-                col = Sym(name_col,n)
-                
-                
-            else:
+            name_col = str(name_col)
+            if re.findall("^[A-Z]",name_col):
                 col = Num(name_col, n)
+            else:
+                col = Sym(name_col,n)       
             self.all[n]=col
             if not name_col[-1] == "X":
                 if "!" in name_col:
@@ -33,10 +31,16 @@ class Cols:
     def add(self, row):
         m={**self.x,**self.y}
         for  _,col in m.items():
+            # print(row[col.at],"----- ",len(row))
             col.add(row[col.at])
         return row
-       
-        
+    # def add(self,row):
+    #     m={**self.x,**self.y}
+    #     for _,cols in m.items():
+    #         for _,col in cols:
+    #             col.add(row[col.at])
+    #     return row
+
         #for A in [self.x, self.y]:
             #for col in A:
                 #col.add(row.cells[col.at])
