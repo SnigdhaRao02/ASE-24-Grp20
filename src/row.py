@@ -28,4 +28,12 @@ class Row:
                 most=temp
                 out=k
         return out,most
+    
+    def distance2heaven(self,data):
+        d,n=0,0
+        for _,col in data.cols.y.items():
+            n+=1
+            d+=pow(abs(col.heaven - col.norm(self.cells[col.at])),2)
+        return pow(d,0.5)/ pow(n,0.5)
+
 

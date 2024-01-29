@@ -93,10 +93,17 @@ def eg_km():
             Data("/Users/challasaicharitha/Desktop/ASE-24-Grp20/data/soybean.csv",llearn)
             print(wme["acc"]/(wme["tries"])," ",k," ",m)
     
+def eg_gate20():
+    print("best,mid")
+    for i  in range(1,21):
+        d= Data("C:/Users/tarje/Desktop/diabetes.csv")
+        stats,bests=d.gate(4,16,0.5)
+        stat, best= stats[-1], bests[-1]
+        print(i," ",best.distance2heaven(d)," ", stat.distance2heaven(d))
 
-#print(eg_bayes())
-#print("---------------")
-#print(eg_km())
+print(eg_gate20())
+
+
 
 
 def run_all():
@@ -139,7 +146,7 @@ def run_tests(test_name):
         print(eg_data())
     
     
-run_tests('all')
+# run_tests('all')
 
     
 
