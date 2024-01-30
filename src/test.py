@@ -95,13 +95,48 @@ def eg_km():
     
 def eg_gate20():
     print("best,mid")
+    ans=[[],[],[],[],[],[]]
     for i  in range(1,21):
-        d= Data("C:/Users/tarje/Desktop/diabetes.csv")
-        stats,bests=d.gate(4,16,0.5)
+        d= Data("/Users/challasaicharitha/gate/data/auto93.csv")
+        stats,bests=d.gate(4,16,0.5,ans)
         stat, best= stats[-1], bests[-1]
-        print(i," ",best.distance2heaven(d)," ", stat.distance2heaven(d))
+      
+        print(i," ",round(best.distance2heaven(d),2)," ", round(stat.distance2heaven(d),2))
+    return ans
 
-print(eg_gate20())
+def test_distance2heaven():
+    d= Data("/Users/challasaicharitha/gate/data/auto93.csv")
+    ex = Row(t=[8,400,230,73,1,4278,9.5,20])
+    res=ex.distance2heaven(d)
+    return round(res,2) >= 0.8 or round(res,2) < 0.83
+
+def test_gate():
+    d= Data("/Users/challasaicharitha/gate/data/auto93.csv")
+    budget0,budget,some=4,16,0.5
+    stats,bests=d.gate(budget0,budget,some)
+    for ele in stats:
+        print(ele.cells)
+    stat, best= stats[-1], bests[-1]
+   # print(stat.cells,best.cells)
+    print(1," ",best.distance2heaven(d)," ", stat.distance2heaven(d))
+    if stats and bests:
+        return True
+    else:
+        return('!!!!!!!!!!!!!!')
+
+#print(eg_bayes())
+#print(eg_km())
+
+#print(eg_num())
+#print("d2h: ",test_distance2heaven())
+#print(test_gate())
+ans=eg_gate20()
+for i in ans:
+    for j in i:
+        print(j)
+        print()
+
+
 
 
 
@@ -126,6 +161,8 @@ def run_all():
     print("Bayes: ",bayes)
     print("CHANGING K AND M VALUES: ")
     eg_km()
+
+    
 
 #run_all()
 
