@@ -32,7 +32,9 @@ class Cols:
         m={**self.x,**self.y}
         for  _,col in m.items():
             # print(row[col.at],"----- ",len(row))
-            col.add(row[col.at])
+            #print("col.add",row.cells)
+            col.add(row.cells[col.at])
+            
         return row
     # def add(self,row):
     #     m={**self.x,**self.y}
