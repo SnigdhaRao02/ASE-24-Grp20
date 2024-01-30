@@ -7,10 +7,12 @@ class Num:
         self.mu = 0 #mean
         self.m2 = 0
         self.lo,self.hi =1000000000000000, -1000000000000000
+        self.heaven = 0 if s.endswith('-') else 1
         #heaven to be added
     def add(self,x):
         if x!="?":
             self.n+=1
+            
             x=float(x)
             d=x-self.mu
             self.mu+=d/self.n
