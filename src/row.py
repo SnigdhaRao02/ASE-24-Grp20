@@ -49,7 +49,18 @@ class Row:
         return math.sqrt(d / n) if n>0 else 0
     
     # Add distance function -> dist
+    def dist(self,other, data):
+        d,n,p = 0,0, 2 # Since p is currently not present in config ( config.p)
+        for _, col in data.cols.x.items():
+            n+=1
+            d+=math.pow(col.dist(self.cells[col.at], other.cells[col.at]), p)
+        return math.pow((d/n),(1/p))
 
     # Add neighbours function
+    def neighbors(self, data, rows=None):
+        if rows is None:
+            rows = data.rows
+        rows_to_sort= rows[1:]
+        return sorted(rows_to_sort, key=lambda row: self.dist(row, data))
 
 
