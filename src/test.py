@@ -123,7 +123,50 @@ def test_gate():
         return True
     else:
         return('!!!!!!!!!!!!!!')
-    
+
+# Testing out how data is stored in the data object
+def test_data():
+    d = Data("C:/Users/tarje/Desktop/auto93.csv")
+    for i in d.rows:
+        print(i.cells)
+    print("---------------------------------------")
+    for j,k in d.cols.x.items():
+        print(j, " ", k, " ", k.at, " ", k.txt, " ", k.n, " ", round(k.mu,2) if (not isinstance(k.mu,str)) else k.mu
+        , " ", k.heaven)
+    print("---------------------------------------")
+    for j,k in d.cols.y.items():
+        print(j, " ", k, " ", k.at, " ", k.txt, " ", k.n, " ", round(k.mu,2) if (not isinstance(k.mu,str)) else k.mu
+        ," ", k.heaven)
+
+def test_dist():
+    d = Data("C:/Users/tarje/Desktop/auto93.csv")
+    r1= d.rows[1]
+    print(r1.cells)
+    r2=d.rows[2]
+    print(r2.cells)
+    distance= r1.dist(r2,d)
+    print(distance)
+
+def test_neighbors():
+    d = Data("C:/Users/tarje/Desktop/auto93.csv")
+    r1=d.rows[1]
+    print(r1.cells)
+    rows= r1.neighbors(d)
+    for i in rows:
+        print(i.cells)
+
+def eg_dist():
+    d = Data("C:/Users/tarje/Desktop/auto93.csv")
+    r1=d.rows[1]
+    rows=r1.neighbors(d)
+    for i in range(0,len(rows)):
+        if((i+1)%30==0 or i==0):
+            print(rows[i].cells, round(rows[i].dist(r1,d),2))
+
+# test_data()
+# test_dist()
+# test_neighbors()
+eg_dist()
 # Add eg_dist (Lua code below)
 # function eg.dist(   d,rows,r1)
 #   d  = DATA.new("../data/auto93.csv")
@@ -138,11 +181,11 @@ def test_gate():
 #print(eg_num())
 #print("d2h: ",test_distance2heaven())
 #print(test_gate())
-ans=eg_gate20()
-for i in ans:
-    for j in i:
-        print(j)
-        print()
+# ans=eg_gate20()
+# for i in ans:
+#     for j in i:
+#         print(j)
+#         print()
 
 
 
