@@ -9,6 +9,8 @@ class Sym:
         self.mode = "" #mean
         self.most = 0
         self.has={}
+        self.mu = "N/A" # Since no mean of symbolic objects is calculated
+        self.heaven=None # Havent defined it yet!!!
        
         #heaven to be added
     def add(self,x):
@@ -38,7 +40,14 @@ class Sym:
         return(cons)
     
     # Add distance function -> dist
-
+    def dist(self,x,y):
+        if (x=="?" and y=="?"):
+            return 1
+        if (x==y):
+            return 0
+        else:
+            return 1
+        
 
     
 
