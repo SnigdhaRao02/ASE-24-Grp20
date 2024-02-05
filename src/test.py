@@ -123,6 +123,14 @@ def test_gate():
         return True
     else:
         return('!!!!!!!!!!!!!!')
+    
+# Add eg_dist (Lua code below)
+# function eg.dist(   d,rows,r1)
+#   d  = DATA.new("../data/auto93.csv")
+#   r1   = d.rows[1]
+#   rows = r1:neighbors(d)
+#   for i, row in pairs(rows) do
+#     if i%30 ==0 then print(l.o(row.cells), l.rnd(row:dist(r1,d))) end end end
 
 #print(eg_bayes())
 #print(eg_km())

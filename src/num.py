@@ -39,6 +39,8 @@ class Num:
         nom=math.exp(-0.5 * (x - mu)**2 / sd**2)
         denom=(sd*2.5)+pow(10,-30)
         return(nom/denom)
+
+    # Add distance function -> dist
             
  
         

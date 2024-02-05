@@ -47,5 +47,9 @@ class Row:
             # d += math.pow(abs(col.heaven - col.norm(self.cells[col.at])), 2)
           
         return math.sqrt(d / n) if n>0 else 0
+    
+    # Add distance function -> dist
+
+    # Add neighbours function
 
 
