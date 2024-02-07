@@ -159,6 +159,8 @@ class Data:
             self.here=data 
             self.lefts=None
             self.rights=None
+            self.C=None
+            self.cut=None
         def walk(self,fun,depth=0):
             fun(self,depth,not (self.lefts or self.rights))
             if self.lefts:
@@ -185,6 +187,47 @@ class Data:
             a,b=b,a
         return a,b,a.dist(b,self),evals 
     #should write half and tree functions 
+
+    #function l.many(t,  n,     u)
+    #n = n or #t
+    #u={}; for _ = 1,n do u[1+#u] = l.any(t) end; return u end
+
+    def half(self,rows,sortp,before):
+        some,a,b,d,C,project,aas,bs=[],None,None,None,None,None,[],[]
+        n=min(config.the.Half,len(rows))
+        for i in range(n):
+            some.append(self.random.choice(rows))
+        a,b,C,evals=self.farapart(some,sortp,before)
+        def d(row1,row2):
+            return row1.dist(row2,self)
+        def project(r):
+            return (pow(d(r,a),2)+pow(C,2) - pow(d(r,b),2))/(2*C)
+        #l.keysort
+        def keysort(t,fun):
+            u=[{'x':x,'y':fun(x)} for x in t]
+            u.sort(key=lambda a: a['y'])
+            v=[xy['x'] for xy in u]
+            return v
+        for n,row in enumerate(keysort(rows,project),1):
+            if n<=len(rows)//2:
+                aas.append(row)
+            else:
+                bs.append(row)
+        return aas,bs,a,b,C,d(a,bs[1]),evals
+    
+    #tree function
+    def tree(self,sortp):
+        evals=0
+        def _tree(data,above):
+            node=Data.Node(data)
+            if(len(data.rows)> 2*(len(self.rows)**0.5)):
+                lefts,rights,node.lefts,node.rights,node.C,node.cut,evals1=self.half(data.rows,sortp,above)
+                evals=evals+evals1
+                node.lefts=_tree(self.clone(lefts),node.lefts)
+                node.rights=_tree(self.clone(rights),node.rights)
+            return node
+        return _tree(self),evals
+
 
 
 

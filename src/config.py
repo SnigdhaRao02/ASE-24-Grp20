@@ -20,6 +20,7 @@ OPTIONS:
   -T --Top    max. good cuts to explore   = 10 
   -k --k      low class frequency kludge       = 1
   -mm --m      low attribute frequency kludge = 2
+  -HH --Half  #items to use in clustering  = 256
 """
 
 """
