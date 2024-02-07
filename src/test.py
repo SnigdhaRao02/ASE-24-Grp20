@@ -126,7 +126,7 @@ def test_gate():
 
 # Testing out how data is stored in the data object
 def test_data():
-    d = Data("C:/Users/tarje/Desktop/auto93.csv")
+    d = Data("/Users/challasaicharitha/gate/data/auto93.csv")
     for i in d.rows:
         print(i.cells)
     print("---------------------------------------")
@@ -139,7 +139,7 @@ def test_data():
         ," ", k.heaven)
 
 def test_dist():
-    d = Data("C:/Users/tarje/Desktop/auto93.csv")
+    d = Data("/Users/challasaicharitha/gate/data/auto93.csv")
     r1= d.rows[1]
     print(r1.cells)
     r2=d.rows[2]
@@ -148,7 +148,7 @@ def test_dist():
     print(distance)
 
 def test_neighbors():
-    d = Data("C:/Users/tarje/Desktop/auto93.csv")
+    d = Data("/Users/challasaicharitha/gate/data/auto93.csv")
     r1=d.rows[1]
     print(r1.cells)
     rows= r1.neighbors(d)
@@ -156,7 +156,7 @@ def test_neighbors():
         print(i.cells)
 
 def eg_dist():
-    d = Data("C:/Users/tarje/Desktop/auto93.csv")
+    d = Data("/Users/challasaicharitha/gate/data/auto93.csv")
     r1=d.rows[1]
     rows=r1.neighbors(d)
     for i in range(0,len(rows)):
@@ -190,7 +190,11 @@ eg_dist()
 
 
 
-
+def eg_tree():
+    t,evals=Data("/Users/challasaicharitha/gate/data/auto93.csv").tree(True)
+    t.show()
+    print(evals)
+eg_tree()
 
 def run_all():
     num_res=eg_num()

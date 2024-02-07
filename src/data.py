@@ -2,6 +2,7 @@ from csv_input import csv
 from row import Row
 from cols import Cols
 import random
+import config
 class Data:
     
     def __init__(self,src,fun=None) -> None:
@@ -148,6 +149,51 @@ class Data:
             if(len(rows)!=0):
                 centroid[k]/=len(rows)
         return centroid
+    def clone(self,rows):
+        new=Data(self.cols.names)
+        for _,row in rows.items():
+            new.add(row)
+        return new 
+    class Node:
+        def __init__(self,data):
+            self.here=data 
+            self.lefts=None
+            self.rights=None
+        def walk(self,fun,depth=0):
+            fun(self,depth,not (self.lefts or self.rights))
+            if self.lefts:
+                self.lefts.walk(fun,depth+1)
+            if self.rights:
+                self.rights.walk(fun,depth+1)
+        def show(self,_show):
+            def distance2heaven(data):
+                return data.mid().distance2heaven(self.here)
+            maxDepth=0
+            def _show(node,depth,leafp):
+                post=(distance2heaven(node.here)+"\t"+node.here.mid().cells) if leafp else ""
+                maxDepth=max(maxDepth,depth)
+                print(('|.. ' * depth) + post)
+            self.walk(_show)
+            print(("   ") * maxDepth,distance2heaven(self.here),self.here.mid().cells)
+            print(("  ") * maxDepth,"-",self.here.cols.names)
+    def farapart(self,rows,sortp,a,b):
+        far=(len(rows)*config.the.Far)//1
+        evals=1 if a else 2
+        a=a or self.random.choice(rows).neighbors(self,rows)[far]
+        b=a.neighbors(self,rows)[far]
+        if sortp and b.distance2heaven(self)<a.distance2heaven(self):
+            a,b=b,a
+        return a,b,a.dist(b,self),evals 
+    #should write half and tree functions 
+
+
+
+            
+
+            
+
+
+
 
 
 
