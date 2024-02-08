@@ -187,14 +187,30 @@ eg_dist()
 #         print(j)
 #         print()
 
+#far test case
+def eg_far():
+    d = Data("/Users/challasaicharitha/gate/data/auto93.csv")
+    a,b,C,evals=d.farapart(d.rows,True)
+    print('--------------')
+    print('far1: ', a.cells)
+    print('far2: ', b.cells)
+    print('distance= ',round(C,2))
 
+eg_far()
+def eg_half():
+    d = Data("/Users/challasaicharitha/gate/data/auto93.csv")
+    lefts,rights,left,right,C,cut=d.half(d.rows,True)
+    print('-------------')
+    print(len(lefts),len(rights),left.cells,right.cells,C,cut)
 
+eg_half()
 
-def eg_tree():
-    t,evals=Data("/Users/challasaicharitha/gate/data/auto93.csv").tree(True)
-    t.show()
-    print(evals)
-eg_tree()
+# def eg_tree():
+#     t,evals=Data("/Users/challasaicharitha/gate/data/auto93.csv").tree(True)
+#     t.show()
+#     print(evals)
+# eg_tree()
+
 
 def run_all():
     num_res=eg_num()
