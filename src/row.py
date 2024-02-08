@@ -50,17 +50,34 @@ class Row:
     
     # Add distance function -> dist
     def dist(self,other, data):
-        d,n,p = 0,0, 2 # Since p is currently not present in config ( config.p)
+       # print("other",other.cells)
+        d,n,p = 0,0, config.the.p # Since p is currently not present in config ( config.p)
         for _, col in data.cols.x.items():
             n+=1
+         #   print("self.cells",self.cells)
             d+=math.pow(col.dist(self.cells[col.at], other.cells[col.at]), p)
+            #print("d",d)
         return math.pow((d/n),(1/p))
 
     # Add neighbours function
     def neighbors(self, data, rows=None):
+        #l.keysort
+        # def keysort(t,fun):
+        #     u=[{'x':x,'y':fun(x)} for x in t]
+        #     u.sort(key=lambda a: a['y'])
+        #     v=[xy['x'] for xy in u]
+        #     print(v)
+        #     return v
+        # def distt(rows):
+        #     for row in rows:
+        #         self.dist(row)
+        
+
+        # return keysort(rows or data.rows, distt(rows or data.rows))
         if rows is None:
             rows = data.rows
         rows_to_sort= rows[1:]
+      
         return sorted(rows_to_sort, key=lambda row: self.dist(row, data))
 
 
