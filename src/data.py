@@ -3,6 +3,7 @@ from row import Row
 from cols import Cols
 import random
 import config
+import math
 class Data:
     
     def __init__(self,src,fun=None) -> None:
@@ -167,9 +168,23 @@ class Data:
                 self.lefts.walk(fun,depth+1)
             if self.rights:
                 self.rights.walk(fun,depth+1)
+        
+        #function l.rnd(n, ndecs)
+    #if type(n) ~= "number" then return n end
+    #if math.floor(n) == n  then return n end
+    ##local mult = 10^(ndecs or 2)
+    #return math.floor(n * mult + 0.5) / mult end
+                
         def show(self,_show):
+            def rnd(n, ndecs=None):
+                if not isinstance(n, (int, float)):
+                    return n
+                if n == math.floor(n):
+                    return n
+                mult = 10 ** (ndecs if ndecs is not None else 2)
+                return math.floor(n * mult + 0.5) / mult
             def distance2heaven(data):
-                return data.mid().distance2heaven(self.here)
+                return rnd(data.mid().distance2heaven(self.here))
             maxDepth=0
             def _show(node,depth,leafp):
                 post=(distance2heaven(node.here)+"\t"+node.here.mid().cells) if leafp else ""
@@ -178,10 +193,12 @@ class Data:
             self.walk(_show)
             print(("   ") * maxDepth,distance2heaven(self.here),self.here.mid().cells)
             print(("  ") * maxDepth,"-",self.here.cols.names)
-    def farapart(self,rows,sortp,a,b):
-        far=(len(rows)*config.the.Far)//1
+    def farapart(self,rows,sortp,a=None):
+        far=int((len(rows)*config.the.Far)//1)
+        
         evals=1 if a else 2
-        a=a or self.random.choice(rows).neighbors(self,rows)[far]
+        a=a or random.choice(rows).neighbors(self,rows)[far]
+        
         b=a.neighbors(self,rows)[far]
         if sortp and b.distance2heaven(self)<a.distance2heaven(self):
             a,b=b,a
@@ -192,11 +209,11 @@ class Data:
     #n = n or #t
     #u={}; for _ = 1,n do u[1+#u] = l.any(t) end; return u end
 
-    def half(self,rows,sortp,before):
-        some,a,b,d,C,project,aas,bs=[],None,None,None,None,None,[],[]
+    def half(self,rows,sortp,before=None):
+        some,a,b,d,C,aas,bs=[],None,None,None,None,[],[]
         n=min(config.the.Half,len(rows))
         for i in range(n):
-            some.append(self.random.choice(rows))
+            some.append(random.choice(rows))
         a,b,C,evals=self.farapart(some,sortp,before)
         def d(row1,row2):
             return row1.dist(row2,self)
@@ -207,8 +224,11 @@ class Data:
             u=[{'x':x,'y':fun(x)} for x in t]
             u.sort(key=lambda a: a['y'])
             v=[xy['x'] for xy in u]
+            print(v)
             return v
-        for n,row in enumerate(keysort(rows,project),1):
+        #sorted(rows_to_sort, key=lambda row: self.dist(row, data)
+        # sorted(rows key=lambda row: project)
+        for n,row in enumerate(sorted(rows, key=lambda row: project(row)),1):
             if n<=len(rows)//2:
                 aas.append(row)
             else:
@@ -218,7 +238,7 @@ class Data:
     #tree function
     def tree(self,sortp):
         evals=0
-        def _tree(data,above):
+        def _tree(data,above=None):
             node=Data.Node(data)
             if(len(data.rows)> 2*(len(self.rows)**0.5)):
                 lefts,rights,node.lefts,node.rights,node.C,node.cut,evals1=self.half(data.rows,sortp,above)
