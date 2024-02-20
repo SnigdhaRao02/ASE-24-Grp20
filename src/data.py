@@ -150,9 +150,9 @@ class Data:
             if(len(rows)!=0):
                 centroid[k]/=len(rows)
         return centroid
-    def clone(self,rows):
-        new=Data(self.cols.names)
-        for _,row in rows.items():
+    def clone(self,rows=None):
+        new=Data([self.cols.names])
+        for row in (rows or []):
             new.add(row)
         return new 
     class Node:
@@ -175,34 +175,52 @@ class Data:
     ##local mult = 10^(ndecs or 2)
     #return math.floor(n * mult + 0.5) / mult end
                 
-        def show(self,_show):
-            def rnd(n, ndecs=None):
-                if not isinstance(n, (int, float)):
-                    return n
-                if n == math.floor(n):
-                    return n
-                mult = 10 ** (ndecs if ndecs is not None else 2)
-                return math.floor(n * mult + 0.5) / mult
-            def distance2heaven(data):
-                return rnd(data.mid().distance2heaven(self.here))
-            maxDepth=0
+        def show(self,maxDepth=0):
+            # def rnd(n, ndecs=None):
+            #     if not isinstance(n, (int, float)):
+            #         return n
+            #     if n == math.floor(n):
+            #         return n
+            #     mult = 10 ** (ndecs if ndecs is not None else 2)
+            #     return math.floor(n * mult + 0.5) / mult
+            # def distance2heaven(data):
+            #     return rnd(data.mid().distance2heaven(self.here))
+            # maxDepth=0
             def _show(node,depth,leafp):
-                post=(distance2heaven(node.here)+"\t"+node.here.mid().cells) if leafp else ""
+                post=""
+              #  nonlocal maxDepth
+                #post=(distance2heaven(node.here)+"\t"+node.here.mid().cells) if leafp else ""
+                if leafp:
+                    post=f"\t{str(node.here.mid().cells)}"
+                nonlocal maxDepth
                 maxDepth=max(maxDepth,depth)
                 print(('|.. ' * depth) + post)
             self.walk(_show)
-            print(("   ") * maxDepth,distance2heaven(self.here),self.here.mid().cells)
-            print(("  ") * maxDepth,"-",self.here.cols.names)
+            print("")
+            print("    " * maxDepth, str(self.here.mid().cells))
+            print("    " * maxDepth, "_", str(self.here.cols.names))
+            #print(("   ") * maxDepth,distance2heaven(self.here),self.here.mid().cells)
+            #print(("  ") * maxDepth,"-",self.here.cols.names)
     def farapart(self,rows,sortp,a=None):
-        far=int((len(rows)*config.the.Far)//1)
+        far = int((len(rows)-1) * config.the.Far)
+        evals = 1 if a else 2
+        a = random.choice(rows)
+        a_neighbors = sorted(a.neighbors(self), key=lambda row: row.distance2heaven(self))
+        b = a_neighbors[far]
+
+        if sortp and b.distance2heaven(self) < a.distance2heaven(self):
+            a, b = b, a
+
+        return a, b, a.dist(b, self), evals
+        # far=int((len(rows)*config.the.Far)//1)
+        # #far=int((len(rows)-1)*config.the.Far) 
+        # evals=1 if a else 2
+        # a=a or random.choice(rows).neighbors(self,rows)[far]
         
-        evals=1 if a else 2
-        a=a or random.choice(rows).neighbors(self,rows)[far]
-        
-        b=a.neighbors(self,rows)[far]
-        if sortp and b.distance2heaven(self)<a.distance2heaven(self):
-            a,b=b,a
-        return a,b,a.dist(b,self),evals 
+        # b=a.neighbors(self,rows)[far]
+        # if sortp and b.distance2heaven(self)<a.distance2heaven(self):
+        #     a,b=b,a
+        # return a,b,a.dist(b,self),evals 
     #should write half and tree functions 
 
     #function l.many(t,  n,     u)
@@ -210,15 +228,22 @@ class Data:
     #u={}; for _ = 1,n do u[1+#u] = l.any(t) end; return u end
 
     def half(self,rows,sortp,before=None):
-        some,a,b,d,C,aas,bs=[],None,None,None,None,[],[]
-        n=min(config.the.Half,len(rows))
-        for i in range(n):
-            some.append(random.choice(rows))
+       
+        some=random.sample(rows,min(config.the.Half,len(rows)))
+        #some  = l.many(rows, math.min(the.Half,#rows))
+        # n=min(config.the.Half,len(rows)) or len(rows)
+       
+        # for i in range(n):
+        #     #t[math.random(#t)]
+        #     some.append(random.choice(rows))
+           # some.append(rows[random.randint(0,len(rows)-1)])
         a,b,C,evals=self.farapart(some,sortp,before)
-        def d(row1,row2):
-            return row1.dist(row2,self)
+        aas=[]
+        bs=[]
+        # def d(row1,row2):
+        #     return row1.dist(row2,self)
         def project(r):
-            return (pow(d(r,a),2)+pow(C,2) - pow(d(r,b),2))/(2*C)
+            return (r.dist( a,self ) **2+ (C ** 2) - (r.dist( b,self )**2))/(2 *C )
         #l.keysort
         def keysort(t,fun):
             u=[{'x':x,'y':fun(x)} for x in t]
@@ -228,25 +253,48 @@ class Data:
             return v
         #sorted(rows_to_sort, key=lambda row: self.dist(row, data)
         # sorted(rows key=lambda row: project)
-        for n,row in enumerate(sorted(rows, key=lambda row: project(row)),1):
-            if n<=len(rows)//2:
-                aas.append(row)
-            else:
-                bs.append(row)
-        return aas,bs,a,b,C,d(a,bs[1]),evals
+        rows=rows[1:]
+        sorted_rows=sorted(rows,key=project)
+        m=len(rows)//2 
+        aas,bs=sorted_rows[:m],sorted_rows[m:]
+        # for n,row in enumerate(sorted(rows, key=lambda row: project(row)),1):
+        #     if n<=len(rows)//2:
+        #         aas.append(row)
+        #     else:
+        #         bs.append(row)
+        return aas,bs,a,b,C,a.dist(bs[0],self),evals
     
     #tree function
     def tree(self,sortp):
         evals=0
         def _tree(data,above=None):
+            nonlocal evals
             node=Data.Node(data)
-            if(len(data.rows)> 2*(len(self.rows)**0.5)):
-                lefts,rights,node.lefts,node.rights,node.C,node.cut,evals1=self.half(data.rows,sortp,above)
-                evals=evals+evals1
-                node.lefts=_tree(self.clone(lefts),node.lefts)
-                node.rights=_tree(self.clone(rights),node.rights)
+            if(len(data.rows)> 2*math.sqrt(len(self.rows))):
+                lefts,rights,node.lefts,node.rights,node.C,node.cut,evals1=data.half(data.rows,sortp,above)
+                evals+=evals1
+                node.lefts=_tree(data.clone(lefts))
+                node.rights=_tree(data.clone(rights))
             return node
         return _tree(self),evals
+    
+    def branch(self,stop):
+        evals=1
+        rest=[]
+        stop=stop or (2*(len(self.rows)**0.5))
+        def _branch(data,above):
+            if len(data.rows)>stop:
+                lefts,rights,left=self.half(data.rows,True,above)
+                evals = evals+1 
+                
+                for _,row1 in enumerate(rights):
+                    rest.append(row1)
+                return _branch(data.clone(lefts),left)
+            else:
+                return self.clone(data.rows), self.clone(rest), evals
+            
+        return _branch(self)
+
 
 
 
