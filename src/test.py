@@ -199,17 +199,19 @@ def eg_far():
 eg_far()
 def eg_half():
     d = Data("/Users/challasaicharitha/gate/data/auto93.csv")
-    lefts,rights,left,right,C,cut=d.half(d.rows,True)
+    lefts,rights,left,right,C,cut,evals=d.half(d.rows,True)
     print('-------------')
     print(len(lefts),len(rights),left.cells,right.cells,C,cut)
 
 eg_half()
 
-# def eg_tree():
-#     t,evals=Data("/Users/challasaicharitha/gate/data/auto93.csv").tree(True)
-#     t.show()
-#     print(evals)
-# eg_tree()
+
+def eg_tree():
+    t,evals=Data("/Users/challasaicharitha/gate/data/auto93.csv").tree(True)
+    t.show()
+    print('-------------')
+    print(f"evals: {evals}")
+eg_tree()
 
 
 def run_all():
