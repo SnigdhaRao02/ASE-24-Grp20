@@ -30,7 +30,7 @@ class Num:
         if(x=='?'):
             return (x)
         else:
-            #print("x",x)
+            
             return((x - self.lo) / (self.hi - self.lo + pow(10,-30)))
     
     #Part of HW3
