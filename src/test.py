@@ -209,10 +209,33 @@ eg_half()
 def eg_tree():
     t,evals=Data("/Users/challasaicharitha/gate/data/auto93.csv").tree(True)
     t.show()
-    print('-------------')
+    
     print(f"evals: {evals}")
+    print('-------------')
 eg_tree()
+def eg_branch():
+    d=Data("/Users/challasaicharitha/gate/data/auto93.csv")
+    best,rest,evals=d.branch()
+    print("Optimization Output")
+    print("Single Descent Output")
+    print(best.mid().cells)
+    print("Evals:",evals)
+    print('-------------')
+    
 
+
+eg_branch()
+
+def doubletap():
+    d=Data("/Users/challasaicharitha/gate/data/auto93.csv")
+    best1,rest,evals1=d.branch(32)
+    best2,_,evals2=best1.branch(4)
+    print("Double Tap Output") 
+    print("Best:",best2.mid().cells)
+    print("Rest:",rest.mid().cells)
+    print("Evals:", evals1+evals2)
+
+doubletap()
 
 def run_all():
     num_res=eg_num()
