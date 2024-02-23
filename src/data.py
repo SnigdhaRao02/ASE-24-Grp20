@@ -192,11 +192,14 @@ class Data:
                 #post=(distance2heaven(node.here)+"\t"+node.here.mid().cells) if leafp else ""
                 if leafp:
                     post=f"\t{str(node.here.mid().cells)}"
+                   # print("POST!!!", )
                 nonlocal maxDepth
                 maxDepth=max(maxDepth,depth)
                 print(('|.. ' * depth) + post)
+                
             self.walk(_show)
             print("")
+            #print("ss",self.here.mid().cells)
             print("    " * maxDepth, str(self.here.mid().cells))
             print("    " * maxDepth, "_", str(self.here.cols.names))
             #print(("   ") * maxDepth,distance2heaven(self.here),self.here.mid().cells)
@@ -278,20 +281,22 @@ class Data:
             return node
         return _tree(self),evals
     
-    def branch(self,stop):
+    def branch(self,stop=None):
         evals=1
         rest=[]
         stop=stop or (2*(len(self.rows)**0.5))
-        def _branch(data,above):
+        def _branch(data,above=None):
+            nonlocal evals
             if len(data.rows)>stop:
-                lefts,rights,left=self.half(data.rows,True,above)
+                lefts,rights,left,a,b,c,d=self.half(data.rows,True,above)
                 evals = evals+1 
+                
                 
                 for _,row1 in enumerate(rights):
                     rest.append(row1)
                 return _branch(data.clone(lefts),left)
             else:
-                return self.clone(data.rows), self.clone(rest), evals
+                return data.clone(data.rows[1:]), data.clone(rest), evals
             
         return _branch(self)
 
