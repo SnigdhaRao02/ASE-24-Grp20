@@ -43,4 +43,4 @@ Double Tap Output
 Best: {'.N': 3, 'Clndrs': 8.0, 'Volume': 303.0, 'Model': 76.67, 'origin': 1, 'Lbs-': 4015.0, 'Acc+': 14.13, 'Mpg+': 16.67}
 Rest: {'.N': 374, 'Clndrs': 5.29, 'Volume': 186.48, 'Model': 76.11, 'origin': 1, 'Lbs-': 2906.89, 'Acc+': 15.67, 'Mpg+': 24.39}
 Evals: 9
-{'.N': 398, 'Clndrs': 5.45, 'Volume': 193.43, 'Model': 76.01, 'origin': 1, 'Lbs-': 2970.42, 'Acc+': 15.57, 'Mpg+': 23.84}
+
