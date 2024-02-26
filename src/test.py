@@ -5,6 +5,7 @@ from row import Row
 import config
 import re
 import sys 
+from stats import egSlurp
 from datetime import datetime
 sys.path.append("../ASE-24-Grp20/")
 
@@ -267,7 +268,100 @@ def eg_hw6():
     print("#")
     all_rows.sort(key=lambda a: a.distance2heaven(d))
     print("100% ",all_rows[0].cells, round(all_rows[0].distance2heaven(d),2))
-eg_hw6()
+
+def sd(list):
+    mean = sum(list) / len(list) 
+    variance = sum([((x - mean) ** 2) for x in list]) / len(list) 
+    res = variance ** 0.5
+    return res
+
+def eg_hw6_stats():
+    src= "C:/Users/tarje/Desktop/auto93.csv"
+    repeats = 20
+    d=Data(src)
+    print("date: ", datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
+    print("file: ",src[src.rfind("/")+1:])
+    print("repeats: ", repeats)
+    print("seed: ", config.the.seed)
+    print("rows: ", len(d.rows)-1)
+    print("cols: ",len(d.cols.x) + len(d.cols.y) + 1 )
+    all_rows=d.rows[1:] # Removing the name columns
+    all_rows.sort(key=lambda a: a.distance2heaven(d))
+    all_d2h=[]
+    ans=[[],[],[],[],[],[]]
+    for i in all_rows:
+        all_d2h.append(i.distance2heaven(d))
+    print("best: ",round(all_rows[0].distance2heaven(d),2))
+    print("tiny: ",round(0.35*sd(all_d2h),2))
+    file = open("stats.txt","a")
+
+    print("#base", end=" ")
+    file.write("base ")
+    for i in all_d2h:
+        file.write(str(round(i,2)) + " ")
+    file.write("\n")
+
+    print("#bonr9", end=" ")
+    file.write("bonr9 ")
+    for i in range(0,repeats):
+        stats,bests=d.gate(4,5,0.5,ans)
+        file.write(str(round(bests[-1].distance2heaven(d),2)) + " ")
+    file.write("\n")
+
+    print("#rand9", end=" ")
+    file.write("rand9 ")
+    for i in range(0,repeats):
+        rand9= random.sample(all_rows,9)
+        rand9.sort(key=lambda a: a.distance2heaven(d))
+        file.write(str(round(rand9[0].distance2heaven(d),2)) + " ")
+    file.write("\n")
+
+    print("#bonr15", end=" ")
+    file.write("bonr15 ")
+    for i in range(0,repeats):
+        stats,bests=d.gate(4,11,0.5,ans)
+        # print("bonr9 ",bests[-1].cells, round(bests[-1].distance2heaven(d),2))
+        file.write(str(round(bests[-1].distance2heaven(d),2)) + " ")
+    file.write("\n")
+
+    print("#rand15", end=" ")
+    file.write("rand15 ")
+    for i in range(0,repeats):
+        rand15= random.sample(all_rows,15)
+        rand15.sort(key=lambda a: a.distance2heaven(d))
+        # print("any50: ",rand15[0].cells, round(rand15[0].distance2heaven(d),2))
+        file.write(str(round(rand15[0].distance2heaven(d),2)) + " ")
+    file.write("\n")
+
+    print("#bonr20", end=" ")
+    file.write("bonr20 ")
+    for i in range(0,repeats):
+        stats,bests=d.gate(4,16,0.5,ans)
+        # print("bonr20 ",bests[-1].cells, round(bests[-1].distance2heaven(d),2))
+        file.write(str(round(bests[-1].distance2heaven(d),2)) + " ")
+    file.write("\n")
+
+    print("#rand20", end=" ")
+    file.write("rand20 ")
+    for i in range(0,repeats):
+        rand20= random.sample(all_rows,20)
+        rand20.sort(key=lambda a: a.distance2heaven(d))
+        # print("any50: ",rand20[0].cells, round(rand20[0].distance2heaven(d),2))
+        file.write(str(round(rand20[0].distance2heaven(d),2)) + " ")
+    file.write("\n")
+
+    print("#rand358", end=" ")
+    file.write("rand358 ")
+    for i in range(0,repeats):
+        rand358= random.sample(all_rows,358)
+        rand358.sort(key=lambda a: a.distance2heaven(d))
+        # print("any358: ",rand358[0].cells, round(rand358[0].distance2heaven(d),2))
+        file.write(str(round(rand358[0].distance2heaven(d),2)) + " ")
+    file.write("\n")
+    file.close()
+    egSlurp()
+eg_hw6_stats()
+
 
 
 def run_all():
