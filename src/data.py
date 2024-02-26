@@ -66,9 +66,14 @@ class Data:
     
 
    # def mid(self,cols, u):
+    def div(self,cols=None):    
+        u = {}
+        m = {**self.cols.x, **self.cols.y} if cols is None else cols
+        u[".N"] = len(self.rows)-1
+        for _,col in m.items():
+            u[col.txt] = round(col.div(),2)
+        return Row(u)
 
-
-  #  def div(self,cols, u):
     
 #    def stats(self,cols,fun,ndivs,u):
   #      u={".N":len(self.rows)}
