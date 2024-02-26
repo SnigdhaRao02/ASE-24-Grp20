@@ -253,6 +253,22 @@ def eg_hw6():
     print("mid:   ", list(d.mid().cells.values())[1:],round(d.mid().distance2heaven(d),2))
     print("div: ", list(d.div().cells.values())[1:], round(d.div().distance2heaven(d),2))
     print("#")
+    ans=[[],[],[],[],[],[]]
+    for i in range(0,repeats):
+        stats,bests=d.gate(4,5,0.5,ans)
+        print("smo9 ",bests[-1].cells, round(bests[-1].distance2heaven(d),2))
+    print("#")
+    all_rows=d.rows[1:] # Removing the name columns
+    # print(all_rows[0].cells)
+    for i in range(0,repeats):
+        any50= random.sample(all_rows,50)
+        any50.sort(key=lambda a: a.distance2heaven(d))
+        print("any50: ",any50[0].cells, round(any50[0].distance2heaven(d),2))
+    print("#")
+    all_rows.sort(key=lambda a: a.distance2heaven(d))
+    print("100% ",all_rows[0].cells, round(all_rows[0].distance2heaven(d),2))
+eg_hw6()
+
 
 def run_all():
     num_res=eg_num()
