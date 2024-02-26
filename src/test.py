@@ -5,6 +5,7 @@ from row import Row
 import config
 import re
 import sys 
+from datetime import datetime
 sys.path.append("../ASE-24-Grp20/")
 
 import math
@@ -30,7 +31,7 @@ def eg_sym():
 
 def eg_data():
     n=0
-    d=Data("/Users/challasaicharitha/gate/data/auto93.csv")
+    d=Data("C:/Users/tarje/Desktop/auto93.csv")
     i=1
     for row in d.rows:
        # print(row)
@@ -97,7 +98,7 @@ def eg_gate20():
     print("best,mid")
     ans=[[],[],[],[],[],[]]
     for i  in range(1,21):
-        d= Data("/Users/challasaicharitha/gate/data/auto93.csv")
+        d= Data("C:/Users/tarje/Desktop/auto93.csv")
         stats,bests=d.gate(4,16,0.5,ans)
         stat, best= stats[-1], bests[-1]
       
@@ -105,13 +106,13 @@ def eg_gate20():
     return ans
 
 def test_distance2heaven():
-    d= Data("/Users/challasaicharitha/gate/data/auto93.csv")
+    d= Data("C:/Users/tarje/Desktop/auto93.csv")
     ex = Row(t=[8,400,230,73,1,4278,9.5,20])
     res=ex.distance2heaven(d)
     return round(res,2) >= 0.8 or round(res,2) < 0.83
 
 def test_gate():
-    d= Data("/Users/challasaicharitha/gate/data/auto93.csv")
+    d= Data("C:/Users/tarje/Desktop/auto93.csv")
     budget0,budget,some=4,16,0.5
     stats,bests=d.gate(budget0,budget,some)
     for ele in stats:
@@ -126,7 +127,7 @@ def test_gate():
 
 # Testing out how data is stored in the data object
 def test_data():
-    d = Data("/Users/challasaicharitha/gate/data/auto93.csv")
+    d = Data("C:/Users/tarje/Desktop/auto93.csv")
     for i in d.rows:
         print(i.cells)
     print("---------------------------------------")
@@ -139,7 +140,7 @@ def test_data():
         ," ", k.heaven)
 
 def test_dist():
-    d = Data("/Users/challasaicharitha/gate/data/auto93.csv")
+    d = Data("C:/Users/tarje/Desktop/auto93.csv")
     r1= d.rows[1]
     print(r1.cells)
     r2=d.rows[2]
@@ -148,7 +149,7 @@ def test_dist():
     print(distance)
 
 def test_neighbors():
-    d = Data("/Users/challasaicharitha/gate/data/auto93.csv")
+    d = Data("C:/Users/tarje/Desktop/auto93.csv")
     r1=d.rows[1]
     print(r1.cells)
     rows= r1.neighbors(d)
@@ -156,7 +157,7 @@ def test_neighbors():
         print(i.cells)
 
 def eg_dist():
-    d = Data("/Users/challasaicharitha/gate/data/auto93.csv")
+    d = Data("C:/Users/tarje/Desktop/auto93.csv")
     r1=d.rows[1]
     rows=r1.neighbors(d)
     for i in range(0,len(rows)):
@@ -166,7 +167,7 @@ def eg_dist():
 # test_data()
 # test_dist()
 # test_neighbors()
-eg_dist()
+# eg_dist()
 # Add eg_dist (Lua code below)
 # function eg.dist(   d,rows,r1)
 #   d  = DATA.new("../data/auto93.csv")
@@ -189,32 +190,32 @@ eg_dist()
 
 #far test case
 def eg_far():
-    d = Data("/Users/challasaicharitha/gate/data/auto93.csv")
+    d = Data("C:/Users/tarje/Desktop/auto93.csv")
     a,b,C,evals=d.farapart(d.rows,True)
     print('--------------')
     print('far1: ', a.cells)
     print('far2: ', b.cells)
     print('distance= ',round(C,2))
 
-eg_far()
+# eg_far()
 def eg_half():
-    d = Data("/Users/challasaicharitha/gate/data/auto93.csv")
+    d = Data("C:/Users/tarje/Desktop/auto93.csv")
     lefts,rights,left,right,C,cut,evals=d.half(d.rows,True)
     print('-------------')
     print(len(lefts),len(rights),left.cells,right.cells,C,cut)
 
-eg_half()
+# eg_half()
 
 
 def eg_tree():
-    t,evals=Data("/Users/challasaicharitha/gate/data/auto93.csv").tree(True)
+    t,evals=Data("C:/Users/tarje/Desktop/auto93.csv").tree(True)
     t.show()
     
     print(f"evals: {evals}")
     print('-------------')
-eg_tree()
+# eg_tree()
 def eg_branch():
-    d=Data("/Users/challasaicharitha/gate/data/auto93.csv")
+    d=Data("C:/Users/tarje/Desktop/auto93.csv")
     best,rest,evals=d.branch()
     print("Optimization Output")
     print("Single Descent Output")
@@ -224,10 +225,10 @@ def eg_branch():
     
 
 
-eg_branch()
+# eg_branch()
 
 def doubletap():
-    d=Data("/Users/challasaicharitha/gate/data/auto93.csv")
+    d=Data("C:/Users/tarje/Desktop/auto93.csv")
     best1,rest,evals1=d.branch(32)
     best2,_,evals2=best1.branch(4)
     print("Double Tap Output") 
@@ -235,7 +236,23 @@ def doubletap():
     print("Rest:",rest.mid().cells)
     print("Evals:", evals1+evals2)
 
-doubletap()
+# doubletap()
+
+# HW06 Code:-
+def eg_hw6():
+    src= "C:/Users/tarje/Desktop/auto93.csv"
+    repeats = 20
+    d=Data(src)
+    print("date: ", datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
+    print("file: ",src[src.rfind("/")+1:])
+    print("repeats: ", repeats)
+    print("seed: ", config.the.seed)
+    print("rows: ", len(d.rows)-1)
+    print("cols: ",len(d.cols.x) + len(d.cols.y) + 1 )
+    print("names: ", d.rows[0].cells," D2h-")
+    print("mid:   ", list(d.mid().cells.values())[1:],round(d.mid().distance2heaven(d),2))
+    print("div: ", list(d.div().cells.values())[1:], round(d.div().distance2heaven(d),2))
+    print("#")
 
 def run_all():
     num_res=eg_num()
