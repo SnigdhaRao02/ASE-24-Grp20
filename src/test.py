@@ -11,7 +11,6 @@ sys.path.append("../ASE-24-Grp20/")
 
 import math
 import random
-
 def eg_num():
     e=Num()
     for _ in range(1,1000):
@@ -215,6 +214,7 @@ def eg_tree():
     print(f"evals: {evals}")
     print('-------------')
 # eg_tree()
+
 def eg_branch():
     d=Data("C:/Users/tarje/Desktop/auto93.csv")
     best,rest,evals=d.branch()
@@ -224,7 +224,6 @@ def eg_branch():
     print("Evals:",evals)
     print('-------------')
     
-
 
 # eg_branch()
 
@@ -276,6 +275,7 @@ def sd(list):
     return res
 
 def eg_hw6_stats():
+    random.seed(config.the.seed)
     src= "C:/Users/tarje/Desktop/auto93.csv"
     repeats = 20
     d=Data(src)
@@ -293,6 +293,7 @@ def eg_hw6_stats():
         all_d2h.append(i.distance2heaven(d))
     print("best: ",round(all_rows[0].distance2heaven(d),2))
     print("tiny: ",round(0.35*sd(all_d2h),2))
+    file= open("stats.txt","w").close()
     file = open("stats.txt","a")
 
     print("#base", end=" ")
