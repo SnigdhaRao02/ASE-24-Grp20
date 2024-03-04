@@ -2,7 +2,9 @@ from num import Num
 from sym import Sym
 from data import Data
 from row import Row
+from range import Range
 import config
+import config2
 import re
 import sys 
 from stats import egSlurp
@@ -19,7 +21,6 @@ def eg_num():
    # print(round(mu,3),round(sd,3))
     return(mu>10 and mu<10.1 and sd>2 and sd<2.05)
 
-
 def eg_sym():
     s=Sym()
     for x in [1,1,1,1,2,2,3]:
@@ -27,7 +28,6 @@ def eg_sym():
     mode,e=s.mid(),s.div()
    # print(mode,e)
     return(e>1.37 and e<1.38 and mode==1)
-
 
 def eg_data():
     n=0
@@ -41,11 +41,6 @@ def eg_data():
         n+=1
     return(n==399)
 
-
-
-
-
-
 # hw 3 
 def learn (data,row,my):
     my["n"]=my["n"]+1
@@ -57,7 +52,6 @@ def learn (data,row,my):
     if(kl not in my["datas"]):
         my["datas"][kl]= Data(data.cols.names)
     my["datas"][kl].add(row.cells)
-
 
 def eg_bayes():
     wme={
@@ -76,7 +70,6 @@ def eg_bayes():
     
     print("Accuracy: ",wme["acc"]/(wme["tries"]))
     return(wme["acc"]/(wme["tries"])>0.72)
-
 
 def eg_km():
     
@@ -361,7 +354,61 @@ def eg_hw6_stats():
     file.write("\n")
     file.close()
     egSlurp()
-eg_hw6_stats()
+# HW06 code end
+
+# HW07 Code:-
+
+def _ranges1(col, rowss):
+    out,nrows = {},0
+    for y, rows in rowss.items():   
+        nrows = nrows + len(rows)
+        for _, row in rows.items():
+            x = row.cells[col.at]
+            if not x == "?":
+                bin = col.bin(x)
+                out[bin] = out[bin] or Range(col.at, col.txt, x)
+                out[bin].add(x,y)
+    # out = l.asList(out)
+    # table.sort(out, function(a,b) return a.x.lo < b.x.lo end)
+    return col.has and out or _mergeds(out, nrows/config2.the.bins)
+
+
+def eg_hw7_bins():
+    random.seed(config.the.seed)
+    src= "D:/AssignmentNotes/NCSU Semester 1/Software Engineering/project 3/ASE-24-Grp20/data/auto93.csv"
+    d=Data(src)
+    branch=d.branch()
+    # LIKE= best.rows
+    # HATE= random.sample(rest.rows, 3*len(LIKE))
+    print("branch : ", len(branch), " rows")
+    for i in range(0,len(branch)-1):
+        print(i, " : ", len(branch[i].rows))
+    print("Best rows (branch[0]) ie LIKE:", len(branch[0].rows))
+    print("Rest rows (branch[1]) ie HATE:", len(branch[1].rows))
+
+    LIKE = branch[0].rows[1:] # Removing the row which has the column names
+    HATE = random.sample(branch[1].rows, 3*len(LIKE))# choosing 3 times as many rest as there are best
+
+    print("Count of LIKE ", len(LIKE))
+    print("Count of HATE ", len(HATE)) 
+
+    r= Range(0, "Cldrs", 0)
+    r.add(6,"LIKE")
+    r.add(-6,"HATE")
+    print(r.show())
+
+    def score(range):
+        return r.score("LIKE", len(LIKE), len(HATE))
+    
+    print("Test Score :" ,score(0))
+
+    t={}
+    for _, cols in d.cols.x.items():
+        print("")
+        for _, range in (_ranges1(col, {"LIKE" = LIKE, "HATE" = HATE})).items():
+            print()
+
+eg_hw7_bins()
 
 
 
@@ -386,8 +433,6 @@ def run_all():
     print("CHANGING K AND M VALUES: ")
     eg_km()
 
-    
-
 #run_all()
 
 def run_tests(test_name):
@@ -405,8 +450,7 @@ def run_tests(test_name):
 
     elif(test_name=='data'):
         print(eg_data())
-    
-    
+ 
 # run_tests('all')
 
     
