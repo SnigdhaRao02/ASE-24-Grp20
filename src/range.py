@@ -5,6 +5,7 @@ class Range:
     def __init__(self, at, txt, lo, hi=None) -> None:
         self.at = at
         self.txt = txt
+        self.scored=0
         self.x= { "lo": lo, "hi": hi or lo}
         self.y = {}
 
@@ -40,15 +41,18 @@ class Range:
             return (pow(like, config2.the.Support) / (like + hate))
     
     def merge(self,other):
+        # print("-------",other)
         both=Range(self.at,self.txt,self.x["lo"])
         both.x["lo"]=min(self.x["lo"],other.x["lo"])
         both.x["hi"]=max(self.x["hi"],other.x["hi"])
-        for _,t in enumerate(self.y,other.y):
-            for k,v in t.items():
-                both.y[k]=both.y.get(k,0)+v
+        mx={**self.y,**other.y}
+        # print("mx----", mx)
+        for _,t in mx.items():
+            both.y[_] = both.y.get(_,0) + t
         return both
     
     def merged(self,other,tooFew):
+        # print('merged other---',other)
         def entropy(t):
             n,e=0,0
             for _,v in t.items():
@@ -61,6 +65,6 @@ class Range:
         e2,n2=entropy(other.y)
         if n1<=tooFew or n2<=tooFew:
             return both
-        if entropy(both.y) <= (n1*e1 + n2*e2)/(n1+n2):
+        if entropy(both.y)[0] <= (n1*e1 + n2*e2)/(n1+n2):
             return both
 

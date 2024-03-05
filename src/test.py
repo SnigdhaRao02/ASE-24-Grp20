@@ -370,29 +370,30 @@ def _ranges1(col, rowss):
         #print("rrrr",rows[:-1])
         for row in rows:
             #if all(isinstance(x, (int, float)) for x in row.cells):
-
-            #print("row--",row.cells)
-                x = row.cells[col.at]
+            # print("row--",row.cells)
+            x = row.cells[col.at]
            # print("x:---",x)
-                if not x == "?":
-                    bin = col.bin(x)
-                #print("bin:",bin)
-                    if bin not in out:
-                        out[bin] =Range(col.at, col.txt, x)
-                
-                    out[bin].add(x,y)
-    # out = l.asList(out)
-                    print("out--",out)
+            if not x == "?":
+                bin = col.bin(x)
+            #print("bin:",bin)
+                if bin not in out:
+                    out[bin] =Range(col.at, col.txt, x)
+                out[bin].add(x,y)
+    out_list=[]
+    for _,u in out.items():
+        out_list.append(u)
+        # print(u)
+    out_list.sort(key=lambda x: x.x["lo"])
     # table.sort(out, function(a,b) return a.x.lo < b.x.lo end)
-    #return (isinstance(col,Sym) and col.has) and out or _mergeds(out, nrows/config2.the.bins)
-    return  col.has and out or _mergeds(out, nrows/config2.the.bins)
+    return (isinstance(col,Sym) and col.has) and out_list or _mergeds(out_list, nrows/config2.the.bins)
+    # return  col.has and out or _mergeds(out, nrows/config2.the.bins)
 
 def _mergeds(ranges,tooFew):
     i,t=0,[]
-    print("ranges--", ranges)
-    while i<= len(ranges):
+    #print("ranges--", ranges)
+    while i < len(ranges):
         a=ranges[i]
-        if i<len(ranges):
+        if i<len(ranges)-1:
             both=a.merged(ranges[i+1],tooFew)
             if both:
                 a=both
@@ -411,62 +412,55 @@ def _mergeds(ranges,tooFew):
 
 def eg_hw7_bins():
     random.seed(config.the.seed)
-    
-    src= "C:/Users/Neelr/Desktop/ASE-24-Grp20/data/auto93.csv"
+    src= "D:/AssignmentNotes/NCSU Semester 1/Software Engineering/project 3/ASE-24-Grp20/data/auto93.csv"
     d=Data(src)
     branch=d.branch()
-    # LIKE= best.rows
-    # HATE= random.sample(rest.rows, 3*len(LIKE))
-    print("branch : ", len(branch), " rows")
-    for i in range(0,len(branch)-1):
-        print(i, " : ", len(branch[i].rows))
-    print("Best rows (branch[0]) ie LIKE:", len(branch[0].rows))
-    print("Rest rows (branch[1]) ie HATE:", len(branch[1].rows))
+    # print("branch : ", len(branch), " rows")
+    # for i in range(0,len(branch)-1):
+    #     print(i, " : ", len(branch[i].rows))
+    # print("Best rows (branch[0]) ie LIKE:", len(branch[0].rows))
+    # print("Rest rows (branch[1]) ie HATE:", len(branch[1].rows))
 
     LIKE = branch[0].rows[1:] # Removing the row which has the column names
-    HATE = random.sample(branch[1].rows, 3*len(LIKE))# choosing 3 times as many rest as there are best
-
-    print("Count of LIKE ", len(LIKE))
-    print("Count of HATE ", len(HATE)) 
-
-    r= Range(0, "Cldrs", 0)
-    r.add(6,"LIKE")
-    r.add(-6,"HATE")
-    print(r.show())
+    HATE = random.sample(branch[1].rows[1:], 3*len(LIKE))# choosing 3 times as many rest as there are best
+    
+    # print("Count of LIKE ", len(LIKE))
+    # print("Count of HATE ", len(HATE)) 
+    # r= Range(0, "Cldrs", 0)
+    # r.add(6,"LIKE")
+    # r.add(-6,"HATE")
+    # print(r.show())
 
     def score(range):
-        return r.score("LIKE", len(LIKE), len(HATE))
+        return range.score("LIKE", len(LIKE), len(HATE))
     
-    print("Test Score :" ,score(0))
-
     t=[]
-    print("cols--",d.cols.x.items())
+    # print("cols--",d.cols.x.items())
+    print("OUTPUT1:-------")
     for _, col in d.cols.x.items():
-       
        print("")
-       print(isinstance(col,Num))
-       print("---",col)
-
-       for rangee in _ranges1(col, {"LIKE" : LIKE, "HATE" :HATE}):
-            print(rangee)
-            t.append(rangee)
+       for v in _ranges1(col, {"LIKE" : LIKE, "HATE" :HATE}):
+            print( {"at": v.at, "scored": v.scored, "txt": v.txt, "x": v.x, "y":v.y})
+            t.append(v)
     
     maxx=score(t[0])
 
-    def l_slice(t,go,stop,inc,u):
+    def l_slice(t,go,stop,inc=None):
         if go and go<0:
             go+=len(t)
         if stop and stop<0:
             stop+=len(t)
         u=[]
-        for j in range((go or 1)//1, (stop or len(t))//1, (inc or 1)//1):
+        if stop > len(t):
+            stop=len(t)
+        for j in range(go-1, stop, (inc or 1)):
             u.append(t[j])
         return u
     print("OUTPUT2:-------")
     print("#scores: ")
     for v in l_slice(t,1,config.the.Beam):
-        if score(v)>max*0.1:
-            print(round(score(v),2)+ "\t"+ v)
+        if score(v)>maxx*0.1:
+            print(round(score(v),2), "\t", {"at": v.at, "scored": v.scored, "txt": v.txt, "x": v.x, "y":v.y})
     print("Count of LIKE ", len(LIKE))
     print("Count of HATE ", len(HATE)) 
 
