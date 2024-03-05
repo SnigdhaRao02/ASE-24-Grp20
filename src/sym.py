@@ -47,6 +47,10 @@ class Sym:
             return 0
         else:
             return 1
+    
+    #hw7
+    def bin(self,x):
+        return x
         
 
     

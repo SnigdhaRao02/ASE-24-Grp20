@@ -5,6 +5,7 @@ we use cuts for multi- objective, semi- supervised, rule-based explanation.
 
 OPTIONS:
   -b --bins   initial number of bins      = 16
+  -BB --Beam  max number of ranges        = 10
   -B --Bootstraps number of bootstraps    = 512
   -c --cohen  parametric small delta      = .35
   -C --Cliffs  non-parametric small delta = 0.2385 

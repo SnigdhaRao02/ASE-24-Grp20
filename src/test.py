@@ -8,6 +8,7 @@ import config2
 import re
 import sys 
 from stats import egSlurp
+import math
 from datetime import datetime
 sys.path.append("../ASE-24-Grp20/")
 
@@ -353,29 +354,65 @@ def eg_hw6_stats():
         file.write(str(round(rand358[0].distance2heaven(d),2)) + " ")
     file.write("\n")
     file.close()
-    egSlurp()
+    #egSlurp()
 # HW06 code end
 
 # HW07 Code:-
 
 def _ranges1(col, rowss):
     out,nrows = {},0
-    for y, rows in rowss.items():   
+    #print("top top", rowss)
+    for y, rows in rowss.items():  
+        #print("top rows",[x.cells for x in rows]) 
+        #print('----------')
+        #print(all(isinstance(x, (int, float)) for x in [1,"clfn",3]))
         nrows = nrows + len(rows)
-        for _, row in rows.items():
-            x = row.cells[col.at]
-            if not x == "?":
-                bin = col.bin(x)
-                out[bin] = out[bin] or Range(col.at, col.txt, x)
-                out[bin].add(x,y)
+        #print("rrrr",rows[:-1])
+        for row in rows:
+            #if all(isinstance(x, (int, float)) for x in row.cells):
+
+            #print("row--",row.cells)
+                x = row.cells[col.at]
+           # print("x:---",x)
+                if not x == "?":
+                    bin = col.bin(x)
+                #print("bin:",bin)
+                    if bin not in out:
+                        out[bin] =Range(col.at, col.txt, x)
+                
+                    out[bin].add(x,y)
     # out = l.asList(out)
+                    print("out--",out)
     # table.sort(out, function(a,b) return a.x.lo < b.x.lo end)
-    return col.has and out or _mergeds(out, nrows/config2.the.bins)
+    #return (isinstance(col,Sym) and col.has) and out or _mergeds(out, nrows/config2.the.bins)
+    return  col.has and out or _mergeds(out, nrows/config2.the.bins)
+
+def _mergeds(ranges,tooFew):
+    i,t=0,[]
+    print("ranges--", ranges)
+    while i<= len(ranges):
+        a=ranges[i]
+        if i<len(ranges):
+            both=a.merged(ranges[i+1],tooFew)
+            if both:
+                a=both
+                i+=1
+        t.append(a)
+        i+=1
+    if len(t)<len(ranges):
+        return _mergeds(t,tooFew)
+    for i in range(1,len(t)):
+        t[i].x["lo"]=t[i-1].x["hi"]
+    t[0].x["lo"]= -math.inf
+    t[-1].x["hi"]= math.inf
+    return t
+
 
 
 def eg_hw7_bins():
     random.seed(config.the.seed)
-    src= "D:/AssignmentNotes/NCSU Semester 1/Software Engineering/project 3/ASE-24-Grp20/data/auto93.csv"
+    
+    src= "C:/Users/Neelr/Desktop/ASE-24-Grp20/data/auto93.csv"
     d=Data(src)
     branch=d.branch()
     # LIKE= best.rows
@@ -402,11 +439,38 @@ def eg_hw7_bins():
     
     print("Test Score :" ,score(0))
 
-    t={}
-    for _, cols in d.cols.x.items():
-        print("")
-        for _, range in (_ranges1(col, {"LIKE" = LIKE, "HATE" = HATE})).items():
-            print()
+    t=[]
+    print("cols--",d.cols.x.items())
+    for _, col in d.cols.x.items():
+       
+       print("")
+       print(isinstance(col,Num))
+       print("---",col)
+
+       for rangee in _ranges1(col, {"LIKE" : LIKE, "HATE" :HATE}):
+            print(rangee)
+            t.append(rangee)
+    
+    maxx=score(t[0])
+
+    def l_slice(t,go,stop,inc,u):
+        if go and go<0:
+            go+=len(t)
+        if stop and stop<0:
+            stop+=len(t)
+        u=[]
+        for j in range((go or 1)//1, (stop or len(t))//1, (inc or 1)//1):
+            u.append(t[j])
+        return u
+    print("OUTPUT2:-------")
+    print("#scores: ")
+    for v in l_slice(t,1,config.the.Beam):
+        if score(v)>max*0.1:
+            print(round(score(v),2)+ "\t"+ v)
+    print("Count of LIKE ", len(LIKE))
+    print("Count of HATE ", len(HATE)) 
+
+        
 
 eg_hw7_bins()
 

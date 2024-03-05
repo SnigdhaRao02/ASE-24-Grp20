@@ -1,4 +1,5 @@
 import math
+import config
 class Num:
     def __init__(self,s="",n=0) -> None:
         self.at= n
@@ -52,6 +53,14 @@ class Num:
         if y == "?":
             y = 1 if x < 0.5 else 0
         return abs(x-y)
+    
+    #hw7
+    def bin(self,x):
+        tmp=(self.hi-self.lo)/(config.the.bins-1)
+        if self.hi==self.lo:
+            return 1
+        else:
+            return math.floor(float(x)/tmp+0.5)*tmp
             
  
         
