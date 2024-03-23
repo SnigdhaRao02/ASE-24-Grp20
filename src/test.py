@@ -3,6 +3,7 @@ from sym import Sym
 from data import Data
 from row import Row
 from range import Range
+from rules import Rules
 import config
 import config2
 import re
@@ -359,6 +360,13 @@ def eg_hw6_stats():
 
 # HW07 Code:-
 
+def _ranges(cols, rowss):
+    t=[]
+    for _, col in cols.items():
+        for range in _ranges1(col,rowss):
+            t.append(range)
+    return t
+
 def _ranges1(col, rowss):
     out,nrows = {},0
     #print("top top", rowss)
@@ -466,8 +474,25 @@ def eg_hw7_bins():
 
         
 
-eg_hw7_bins()
+# eg_hw7_bins()
+# HW8 - Rules
+def eg_rules():
+    print("Building rules...")
+    random.seed(config2.the.seed)
+    src= "D:/AssignmentNotes/NCSU Semester 1/Software Engineering/project 3/ASE-24-Grp20/data/auto93.csv"
+    d=Data(src)
+    best0, rest, evals1 = d.branch(config2.the.d)
+    best, _, evals2 = best0.branch(config2.the.D)
+    # print(evals1 + evals2 + config2.the.D - 1) What is this number mean??
 
+    LIKE = best.rows[1:] # Removing the row which has the column names
+    HATE = random.sample(rest.rows[1:], 3*len(LIKE))# choosing 3 times as many rest as there are best
+    rowss={"LIKE": LIKE, "HATE":HATE}
+    print(len(_ranges(d.cols.x, rowss)))
+    # rules = Rules((_ranges(d.cols.x, rowss), "LIKE", rowss))
+    
+
+eg_rules()
 
 
 def run_all():

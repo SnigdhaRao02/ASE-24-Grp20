@@ -293,7 +293,7 @@ class Data:
         def _branch(data,above=None):
             nonlocal evals
             if len(data.rows)>stop:
-                lefts,rights,left,a,b,c,d=self.half(data.rows,True,above)
+                lefts,rights,left,a,b,c,d=self.half(data.rows[1:],True,above)
                 evals = evals+1 
                 
                 
