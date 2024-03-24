@@ -2,6 +2,7 @@ import config2
 from itertools import chain, combinations
 import rule as Rule
 
+
 class Rules:
     
     def __init__(self, ranges, goal, rowss) -> None:
@@ -17,8 +18,18 @@ class Rules:
         self.likeHate()
         for _, range in ranges.items():
             range.scored= self.score(range.y)
-        self.sorted = self.top(self.try( self.top(ranges)))
+        self.sorted = self.top(self._try( self.top(ranges)))
+    def top(self,t):
+        t.sort(key=lambda x: x.scored, reverse=True)
+        u=[]
+        for _,x in t.items():
+            if x.scored>=t[1].scored * config2.the.Cut:
+                u.append(x)
+        return u[:config2.the.Beam+1]
 
+
+
+    
     def likeHate(self):
         for y, rows in self.rowss.items():
             if y == self.goal:
@@ -49,3 +60,7 @@ class Rules:
         for _, subset in self.powerset(ranges).items():
             if len(subset) >0:
                 rule = Rule.new(subset)
+                rule.scored=self.score(rule.selects(self.rowss))
+                if rule.scored >0.01:
+                    u.append(rule)
+        return u
