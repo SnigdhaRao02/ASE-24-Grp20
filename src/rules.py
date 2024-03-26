@@ -1,6 +1,6 @@
 import config2
 from itertools import chain, combinations
-import rule as Rule
+from rule import Rule
 
 
 class Rules:
@@ -9,22 +9,24 @@ class Rules:
         print("Creating instance of Rules")
         for _, row in rowss.items():
             print(_, " ", len(row), "items")
-        self.sorted={}
+        self.sorted=[]
         self.goal=goal
         self.rowss=rowss
         self.LIKE=0
         self.HATE=0
 
         self.likeHate()
-        for _, range in ranges.items():
-            range.scored= self.score(range.y)
+        for _, range in enumerate(ranges):
+            print("Ranges: ",range.y)
+            range.scored= self.score(range.y,self.goal)
         self.sorted = self.top(self._try( self.top(ranges)))
     def top(self,t):
         t.sort(key=lambda x: x.scored, reverse=True)
         u=[]
-        for _,x in t.items():
-            if x.scored>=t[1].scored * config2.the.Cut:
+        for _,x in enumerate(t):
+            if x.scored>=t[0].scored * config2.the.Cut:
                 u.append(x)
+       # print("top", u)
         return u[:config2.the.Beam+1]
 
 
@@ -37,30 +39,34 @@ class Rules:
             else:
                 self.HATE+= len(rows)
     
-    def score(self, goal, LIKE, HATE):
+    def score(self, t,goal):
+        print("t"," ",t)
         like, hate, tiny = 0,0,pow(1,-30)
-        for klass,n in self.y.items():
+        for klass,n in t.items():
             if klass == goal:
                 like+= n 
             else:
                 hate+=n
-        like, hate= like/ (LIKE + tiny), hate/ (HATE + tiny)
-        if hate > like:
+        print(like,hate)
+        like, hate= like/ (self.LIKE + tiny), hate/ (self.HATE + tiny)
+        
+        if hate >=like:
             return 0
         else:
             return (pow(like, config2.the.Support) / (like + hate))
         
-    def powerset(iterable):
+    def powerset(self,iterable):
         s = list(iterable)
         return chain.from_iterable(combinations(s, r) for r in range(1,len(s)+1))
 
 
     def _try(self, ranges):
         u=[]
-        for _, subset in self.powerset(ranges).items():
+        for _, subset in enumerate(self.powerset(ranges)):
+            #print("subset",subset)
             if len(subset) >0:
-                rule = Rule.new(subset)
-                rule.scored=self.score(rule.selects(self.rowss))
+                rule = Rule(subset)
+                rule.scored=self.score(rule.selectss(self.rowss),self.goal)
                 if rule.scored >0.01:
                     u.append(rule)
         return u
