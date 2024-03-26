@@ -8,16 +8,29 @@ class Rule:
     def __init__(self, ranges) -> None:
         self.parts={}
         self.scored=0
-        for _, range in ranges.items():
-            t=(self.parts[range.txt] or {})
+       
+        for range in ranges:
+            #print('txt', range.txt)
+            if( range.txt in self.parts):
+                t=self.parts[range.txt]
+            else:
+                t=[]
+            
             t.append(range)
             self.parts[range.txt]=t 
-        return self
+       
     def selects(self,rows):
         t=[]
-        for _,r in rows.items():
+       # print("select rows", rows)
+        for r in rows:
             if self._and(r):
                 t.append(r)
+        return t
+    def selectss(self,rowss):
+        t={}
+        #print("rowss",rowss)
+        for y,rows in rowss.items():
+            t[y]=len(self.selects(rows))
         return t
     def _and(self,row):
         for _,ranges in (self.parts).items():
@@ -25,11 +38,14 @@ class Rule:
                 return False 
         return True 
     def _or(self,ranges,row):
-        x=row.cells[ranges[1].at]
+        ##print("ranges[1]"," ",ranges[0].at)
+        #print("rule", row[0].cells, row[1].cells)
+       
+        x=row.cells[ranges[0].at]
         if x=="?":
             return True 
-        for _,range in ranges.items():
-            lo,hi=range.x.lo,range.x.hi 
+        for range in ranges:
+            lo,hi=range.x["lo"],range.x["hi"] 
             if (lo==hi and lo==x) or (lo<=x and x<hi):
                 return True 
         return False 
@@ -38,22 +54,24 @@ class Rule:
         ands=[]
         for _,ranges in (self.parts).items():
             ors=_showless(ranges) 
+            print("ors",ors)
             at=0 
             for i,range in enumerate(ors):
                 at=range.at 
                 ors[i]=range.show()
             ands.append(" or ".join(ors))
+        print("ands",ands)
         return " and ".join(ands) 
 def _showless(t,ready=None):
     if not ready:
         t=t 
-        t.sort(key=lambda x: x.lo)
-    i,u=1,[]
+        t.sort(key=lambda x: x.x["lo"])
+    i,u=0,[]
     
-    while i<= len(t):
+    while i< len(t)-1:
         a=t[i]
         if i<len(t):
-            if a.x.hi==t[i+1].x.lo:
+            if a.x["hi"]==t[i+1].x["lo"]:
                 a=a.merge(t[i+1])
                 i=i+1 
         u.append(a)
