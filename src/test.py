@@ -11,6 +11,7 @@ import sys
 from stats import egSlurp
 import math
 from datetime import datetime
+
 sys.path.append("../ASE-24-Grp20/")
 
 import math
@@ -479,7 +480,8 @@ def eg_hw7_bins():
 def eg_rules():
     print("Building rules...")
     random.seed(config2.the.seed)
-    src= "D:/AssignmentNotes/NCSU Semester 1/Software Engineering/project 3/ASE-24-Grp20/data/auto93.csv"
+   # src= "D:/AssignmentNotes/NCSU Semester 1/Software Engineering/project 3/ASE-24-Grp20/data/auto93.csv"
+    src="/Users/challasaicharitha/Desktop/ASE-24-Grp20/data/auto93.csv"
     d=Data(src)
     best0, rest, evals1 = d.branch(config2.the.d)
     best, _, evals2 = best0.branch(config2.the.D)
@@ -489,7 +491,24 @@ def eg_rules():
     HATE = random.sample(rest.rows[1:], 3*len(LIKE))# choosing 3 times as many rest as there are best
     rowss={"LIKE": LIKE, "HATE":HATE}
     print(len(_ranges(d.cols.x, rowss)))
-    # rules = Rules((_ranges(d.cols.x, rowss), "LIKE", rowss))
+    
+    rules = Rules((_ranges(d.cols.x, rowss)), goal="LIKE", rowss=rowss)
+    print("test rules", rules.sorted)
+    for i,rule in enumerate(rules.sorted):
+        print("test rule", rule)
+        result=d.clone(rule.selects(rest.rows[1:]))
+        print("result", result)
+        if(len(result.rows[1:])>0):
+            result.rows[1:].sort(key=lambda x: x.distance2heaven(d))
+            print(rule.show())
+            #print(round(rule.scored),round(result.mid().distance2heaven(d)))
+            print(round(rule.scored),round(result.mid().distance2heaven(d),round(result.rows[1].distance2heaven(d))))
+            #print(result.mid().cells,"  ",rule.show())
+            
+
+
+
+
     
 
 eg_rules()
