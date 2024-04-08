@@ -8,16 +8,18 @@ class Rule:
     def __init__(self, ranges) -> None:
         self.parts={}
         self.scored=0
-       
         for range in ranges:
-            #print('txt', range.txt)
-            if( range.txt in self.parts):
-                t=self.parts[range.txt]
-            else:
-                t=[]
+            self.parts.setdefault(range.txt, []).append(range)
+       
+        # for range in ranges:
+        #     #print('txt', range.txt)
+        #     if( range.txt in self.parts):
+        #         t=self.parts[range.txt]
+        #     else:
+        #         t=[]
             
-            t.append(range)
-            self.parts[range.txt]=t 
+        #     t.append(range)
+        #     self.parts[range.txt]=t 
        
     def selects(self,rows):
         t=[]
@@ -33,7 +35,7 @@ class Rule:
             t[y]=len(self.selects(rows))
         return t
     def _and(self,row):
-        for _,ranges in (self.parts).items():
+        for ranges in self.parts.values():
             if not self._or(ranges,row):
                 return False 
         return True 
@@ -52,7 +54,7 @@ class Rule:
     
     def show(self):
         ands=[]
-        for _,ranges in (self.parts).items():
+        for ranges in self.parts.values():
             ors=_showless(ranges) 
             print("ors",ors)
             at=0 
@@ -61,16 +63,24 @@ class Rule:
                 ors[i]=range.show()
             ands.append(" or ".join(ors))
         print("ands",ands)
-        return " and ".join(ands) 
-def _showless(t,ready=None):
+        return " and ".join(ands)
+def copy(t):
+    if not isinstance(t,dict):
+        return t 
+    u={}
+    for k,v in t.items():
+        u[copy(k)]=copy(v)
+    return u
+ 
+def _showless(t,ready=False):
     if not ready:
-        t=t 
+        t=copy(t)
         t.sort(key=lambda x: x.x["lo"])
     i,u=0,[]
     
-    while i< len(t)-1:
+    while i<len(t):
         a=t[i]
-        if i<len(t):
+        if i<len(t)-1:
             if a.x["hi"]==t[i+1].x["lo"]:
                 a=a.merge(t[i+1])
                 i=i+1 
@@ -79,7 +89,7 @@ def _showless(t,ready=None):
     if(len(u)==len(t)):
         return t 
     else:
-        return _showless(u,ready)
+        return _showless(u,ready=True)
 
 
 
