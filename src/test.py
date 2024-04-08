@@ -506,7 +506,7 @@ def eg_rules():
             #print(result.mid().cells,"  ",rule.show())
             
 
-
+        
 
 
     
